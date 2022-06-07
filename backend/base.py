@@ -1,10 +1,11 @@
 """
-UIP Base Classes
+UIP asset base classes.
 """
+
 from abc import ABC, abstractmethod
-from collections import defaultdict
+from external import get_curve
 from enums import Commodity
-from loader import get_curve
+from collections import defaultdict
 
 class Stock(ABC):
     """
@@ -25,6 +26,30 @@ class Stock(ABC):
         Returns company's intrinsic value based on DCF valuation.
         """
         pass
+
+class Fund(ABC):
+    """
+    Fund base class. 
+    """
+    pass
+
+class PhysicalFund(Fund):
+    """
+    Physical fund.
+    """
+    pass
+
+class ETF(Fund):
+    """
+    ETF.
+    """
+    pass
+
+class Option(ABC):
+    """
+    Option base class.
+    """
+    pass
 
 class CommodityCurve():
     """
@@ -61,5 +86,4 @@ class CommodityCurve():
         Returns price of most recent futures contract. 
         This is not necessarily the current spot price. 
         """
-        return self.curve[0][1]        
-
+        return self.curve[0][1]

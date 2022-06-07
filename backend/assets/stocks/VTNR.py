@@ -47,6 +47,4 @@ class VTNR(Stock):
 
         shs = 94e6 # fully diluted
 
-        print(fcfs)
-
         return mcap / shs

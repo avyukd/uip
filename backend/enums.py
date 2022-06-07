@@ -1,5 +1,4 @@
 from enum import Enum
-
 class Commodity(Enum):
     DIESEL = "23%3D1"
     GASOLINE = "27%3D2"

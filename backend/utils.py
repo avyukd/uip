@@ -1,10 +1,6 @@
 
-from typing import Any, Dict, List
+from typing import Any, List
 import os
-from bs4 import BeautifulSoup
-from enums import Commodity
-import requests
-import re 
 
 def NPV(discount_rate: float, fcfs: List[float]) -> float:
     """
@@ -29,7 +25,7 @@ def get_tickers():
     Returns list of tickers of all companies in /stocks/*.py.
     """
     tickers = []
-    for filename in os.listdir("stocks"):
+    for filename in os.listdir("assets/stocks"):
         if filename[-3:] == ".py":
             tickers.append(filename[:-3]) # remove .py
     return tickers
