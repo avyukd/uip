@@ -9,14 +9,14 @@ class PLTR(Stock):
     """
     PLTR class.
     """
-    def __init__(self, gov_growth_rate: float, comm_growth_rate: float, terminal_growth_rate: float,
+    def __init__(self, gov_growth_rate: float, comm_growth_rate: float, tech_terminal_growth_rate: float,
                 dilution: float):
         """
         Initializes PLTR object.
         """
         self.gov_growth_rate = gov_growth_rate
         self.comm_growth_rate = comm_growth_rate
-        self.terminal_growth_rate = terminal_growth_rate
+        self.terminal_growth_rate = tech_terminal_growth_rate
         self.dilution = dilution
         super().__init__("PLTR", "Technology", "Software", "NYSE")
 
@@ -44,8 +44,6 @@ class PLTR(Stock):
             new_customers = curr_gov_customers * self.gov_growth_rate + curr_comm_customers * self.comm_growth_rate
             curr_gov_customers *= (1 + self.gov_growth_rate)
             curr_comm_customers *= (1 + self.comm_growth_rate)
-
-        print(revenues)
 
         ebits = []
         sga = 1000000000
