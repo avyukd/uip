@@ -47,5 +47,3 @@ def load_all_intrinsic_values(user_input: Dict = {}) -> Dict:
         intrinsic_values[ticker] = stock.get_intrinsic_value()
     
     return intrinsic_values
-
-print(load_all_intrinsic_values())

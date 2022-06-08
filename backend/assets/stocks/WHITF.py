@@ -1,21 +1,19 @@
 import sys
-from enums import Forex
-from exceptions import MustSpecifyValuationTechnique
+
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
-from base import CommodityCurve
+from enums import Forex
+from exceptions import MustSpecifyValuationTechnique
+from base import CommodityCurve, Stock
 from enums import Commodity
 from typing import Union
-
-
-from base import Stock
 from utils import NPV, TV, exit_TV
 
 class WHITF(Stock):
     """
     WHITF class.
     """
-    def __init__(self, coal_price: Union[float, str], thermal_coal_terminal_growth_rate: float, exit_multiple: float):
+    def __init__(self, coal_price: Union[float, str], thermal_coal_terminal_growth_rate: Union[float, str], exit_multiple: Union[float, str]):
         """
         Initializes WHITF object.
         - coal_price is user input or NULL for commodity curve

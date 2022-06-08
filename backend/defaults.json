@@ -1,7 +1,9 @@
 {
     "generics":{
         "tech_terminal_growth_rate":0.02,
-        "thermal_coal_terminal_growth_rate":-0.05
+        "thermal_coal_terminal_growth_rate":-0.05,
+        "floater_rate":350000,
+        "jackup_rate":110000
     },
     "PLTR":{
         "gov_growth_rate":0.09,
@@ -16,5 +18,8 @@
     "WHITF":{
         "coal_price":"NULL",
         "exit_multiple":"NULL"
+    },
+    "VAL":{
+        "exit_multiple":5
     }
 }
