@@ -4,14 +4,15 @@ UIP asset base classes.
 
 from abc import ABC, abstractmethod
 from external import get_curve
-from enums import Commodity
+from enum import Enum
+from enums import Commodity, Forex
 from collections import defaultdict
 
 class Stock(ABC):
     """
     Stock base class. Inherited by each company in /stocks/*.py.
     """
-    def __init__(self, ticker: str, sector: str, industry: str, exchange: str):
+    def __init__(self, ticker: str, company_name: str, sector: str, industry: str, exchange: str):
         """
         Initializes Stock object.
         """
@@ -19,6 +20,7 @@ class Stock(ABC):
         self.sector = sector
         self.industry = industry
         self.exchange = exchange
+        self.company_name = company_name
 
     @abstractmethod
     def get_intrinsic_value(self):
@@ -51,17 +53,14 @@ class Option(ABC):
     """
     pass
 
-class CommodityCurve():
+class FuturesCurve():
     """
-    CommodityCurve class.
+    Futures curve.
     """
-    def __init__(self, commodity: Commodity):
-        """
-        Initializes CommodityCurve object.
-        """
-        self.commodity_name = str(commodity).split(".")[1]
-        self.commodity_symbol = commodity.value
-        self.curve = get_curve(commodity)
+    def __init__(self, symbol: Enum):
+        self.name = str(symbol).split(".")[1]
+        self.symbol = symbol.value
+        self.curve = get_curve(symbol)
         self.annual_prices = self.get_annual_prices()
 
     def get_annual_prices(self):
@@ -81,9 +80,30 @@ class CommodityCurve():
         
         return annual_prices
 
+    @abstractmethod
     def get_most_recent_futures_price(self):
         """
         Returns price of most recent futures contract. 
         This is not necessarily the current spot price. 
         """
         return self.curve[0][1]
+
+class CommodityCurve(FuturesCurve):
+    """
+    CommodityCurve class.
+    """
+    def __init__(self, commodity: Commodity):
+        """
+        Initializes CommodityCurve object.
+        """
+        super().__init__(commodity)
+
+class ForexCurve(FuturesCurve):
+    """
+    ForexCurve class.
+    """
+    def __init__(self, forex: Forex):
+        """
+        Initializes ForexCurve object.
+        """
+        super().__init__(forex)

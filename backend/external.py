@@ -3,7 +3,7 @@ import os
 import datetime 
 import requests
 from bs4 import BeautifulSoup
-from enums import Commodity
+from enum import Enum
 from typing import List
 import json 
 import re
@@ -32,12 +32,17 @@ def get_stock_prices():
     
     return wrappedQuotes
 
-def get_curve(symbol: Commodity) -> List[List[str]]:
+def get_curve(symbol: Enum) -> List[List]:
     """
     Get curve from cache or from esignal.
     """
     commodity_name = str(symbol).split(".")[1]
+
+    if not os.path.exists(f"cache/{commodity_name}"):
+        os.makedirs(f"cache/{commodity_name}")
+    
     files = os.listdir(f"cache/{commodity_name}")
+    
     files.sort()
     if len(files) > 0:
         mostrecentdate = files[-1].split(".")[0]
@@ -50,7 +55,7 @@ def get_curve(symbol: Commodity) -> List[List[str]]:
     return esignal_request(symbol)
 
 
-def esignal_request(symbol: Commodity):
+def esignal_request(symbol: Enum):
     """
     Scrape esignal quotes and return relevant commodity curve.
     """
@@ -71,15 +76,16 @@ def esignal_request(symbol: Commodity):
                 pair.append(parse_date(content))
             price_table = cell.find("table", {"class": "last_settle"})
             if price_table:
-                pair.append(float(price_table.find("td").text.strip()))
-                break
+                raw = price_table.find("td").text.strip()
+                try:
+                    pair.append(float(raw))
+                    break
+                except ValueError:
+                    continue
         if len(pair) == 2:
             data.append(pair)
     
     data.sort(key=lambda x: (int(x[0][-2:]), int(x[0][:2])))
-
-    if not os.path.exists(f"cache/{commodity_name}"):
-        os.makedirs(f"cache/{commodity_name}")
 
     current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     

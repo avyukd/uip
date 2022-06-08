@@ -48,3 +48,4 @@ def load_all_intrinsic_values(user_input: Dict = {}) -> Dict:
     
     return intrinsic_values
 
+print(load_all_intrinsic_values())
