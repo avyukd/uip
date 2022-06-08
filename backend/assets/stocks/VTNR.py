@@ -16,7 +16,7 @@ class VTNR(Stock):
         self.discount_to_crack_spread = discount_to_crack_spread
         self.utilization_rate = utilization_rate
         self.exit_multiple = exit_multiple
-        super().__init__("VTNR", "Oil", "Downstream", "NASDAQ")
+        super().__init__("VTNR", "Vertex Energy", "Oil", "Downstream", "NASDAQ")
 
     def get_intrinsic_value(self):
         """

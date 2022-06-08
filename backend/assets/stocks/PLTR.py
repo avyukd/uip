@@ -18,7 +18,7 @@ class PLTR(Stock):
         self.comm_growth_rate = comm_growth_rate
         self.terminal_growth_rate = tech_terminal_growth_rate
         self.dilution = dilution
-        super().__init__("PLTR", "Technology", "Software", "NYSE")
+        super().__init__("PLTR", "Palantir", "Technology", "Software", "NYSE")
 
     def get_intrinsic_value(self):
         """
