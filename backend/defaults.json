@@ -4,7 +4,8 @@
         "thermal_coal_terminal_growth_rate":-0.05,
         "floater_rate":350000,
         "jackup_rate":110000,
-        "tin_price":40000
+        "tin_price":40000,
+        "newc_coal_price":"NULL" 
     },
     "PLTR":{
         "gov_growth_rate":0.09,
@@ -17,13 +18,15 @@
         "exit_multiple":5
     },
     "WHITF":{
-        "coal_price":"NULL",
         "exit_multiple":"NULL"
     },
     "VAL":{
         "exit_multiple":5
     },
     "AFMJF":{
+        "exit_multiple":5
+    },
+    "DO":{
         "exit_multiple":5
     }
 }

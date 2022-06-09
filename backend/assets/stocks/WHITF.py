@@ -13,14 +13,14 @@ class WHITF(Stock):
     """
     WHITF class.
     """
-    def __init__(self, coal_price: Union[float, str], thermal_coal_terminal_growth_rate: Union[float, str], exit_multiple: Union[float, str]):
+    def __init__(self, newc_coal_price: Union[float, str], thermal_coal_terminal_growth_rate: Union[float, str], exit_multiple: Union[float, str]):
         """
         Initializes WHITF object.
         - coal_price is user input or NULL for commodity curve
         - Null for growth rate or multiple means just use one valuation technique
         """
-        if coal_price != "NULL":
-            self.coal_curve = [[yr, coal_price] for yr in range(2022, 2027, 1)]
+        if newc_coal_price != "NULL":
+            self.coal_curve = [[yr, newc_coal_price] for yr in range(2022, 2027, 1)]
         else:
             self.coal_curve = CommodityCurve(Commodity.NEWC_COAL).get_annual_prices()
 
