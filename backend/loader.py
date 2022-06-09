@@ -47,3 +47,7 @@ def load_all_intrinsic_values(user_input: Dict = {}) -> Dict:
         intrinsic_values[ticker] = stock.get_intrinsic_value()
     
     return intrinsic_values
+
+
+if __name__ == "__main__":
+    print(load_all_intrinsic_values())

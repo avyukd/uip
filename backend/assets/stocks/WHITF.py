@@ -39,7 +39,7 @@ class WHITF(Stock):
         if self.exit_multiple is None and self.terminal_growth_rate is None:
             raise MustSpecifyValuationTechnique("Must provide either exit multiple or terminal growth rate.")
         
-        super().__init__("WHITF", "Whitehaven Coal", "Coal", "Producer", "NYSE")    
+        super().__init__("WHITF", "Whitehaven Coal", "Coal", "Producer", "OTC")    
 
     def get_intrinsic_value(self):
         """

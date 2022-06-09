@@ -7,6 +7,10 @@ from external import get_curve
 from enum import Enum
 from enums import Commodity, Forex
 from collections import defaultdict
+import datetime
+from math import log, sqrt, pi, exp
+from scipy.stats import norm
+import numpy as np
 
 class Stock(ABC):
     """
@@ -47,11 +51,33 @@ class ETF(Fund):
     """
     pass
 
-class Option(ABC):
-    """
-    Option base class.
-    """
-    pass
+# class Option(ABC):
+#     """
+#     Option base class.
+#     """
+#     def __init__(self, ticker: str, strike: float, expiry: str):
+#         """
+#         Initializes Option object.
+#         """
+#         self.ticker = ticker
+#         self.strike = strike
+#         self.expiry = datetime.strptime(expiry, "%m-%d-%Y")
+    
+
+# #helper functions
+# def d1(S,K,T,r,sigma):
+#     return(log(S/K)+(r+sigma**2/2.)*T)/(sigma*sqrt(T))
+
+# def d2(S,K,T,r,sigma):
+#     return d1(S,K,T,r,sigma)-sigma*sqrt(T)
+
+# def bs_call(S,K,T,r,sigma):
+#     return S*norm.cdf(d1(S,K,T,r,sigma))-K*exp(-r*T)*norm.cdf(d2(S,K,T,r,sigma))
+
+# #get fair price of option
+# def get_option_price(underlying, strike, interest_rate, time_to_expiration, volatility):
+#     return bs_call(underlying, strike, time_to_expiration, interest_rate, volatility)
+
 
 class FuturesCurve():
     """
@@ -107,3 +133,35 @@ class ForexCurve(FuturesCurve):
         Initializes ForexCurve object.
         """
         super().__init__(forex)
+
+class SpotPrice(ABC):
+    """
+    SpotPrice class.
+    """
+    def __init__(self, symbol: Enum, price: float):
+        """
+        Initializes SpotPrice object.
+        """
+        self.symbol = symbol.value
+        self.price = self.get_price()
+    
+    @abstractmethod
+    def get_price():
+        pass
+
+# class CommodityPrice(SpotPrice):
+#     """
+#     CommodityPrice class.
+#     """
+#     def __init__(self, commodity: Commodity, price: float):
+#         """
+#         Initializes CommodityPrice object.
+#         """
+#         super().__init__(commodity, price)
+    
+#     def get_price(self):
+#         """
+#         Returns price of commodity.
+#         """
+#         return get_commodity_price(self.commodity)
+        

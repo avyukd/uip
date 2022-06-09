@@ -6,6 +6,8 @@ class Commodity(Enum):
     WTI = "CL"
     COPPER = "HG"
     NEWC_COAL = "NCF-ICE"
+    TIN = "tin"
+    URANIUM = "uranium-futures"
 
 class Forex(Enum):
     AUD = "QAD"

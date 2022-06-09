@@ -1,3 +1,4 @@
+from enums import Commodity
 from utils import parse_date
 import os 
 import datetime 
