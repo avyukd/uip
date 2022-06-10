@@ -13,10 +13,26 @@ from utils import get_tickers
 def get_stock_prices():
     """
     Load stock prices from EOD API. Check cache first.
+    Maximum total delay of stock price is 30 minutes (15 min in cache + 15 min in delayed API).
     """
+    tickers = get_tickers()
+    
+    files = os.listdir(f"cache/quotes")
+    files.sort()
+    if len(files) > 0:
+        filename = files[-1].split(".")[0]
+        mostrecentdate = filename.split("_")[0]
+        num_cached_tickers = int(filename.split("_")[1])
+        if len(tickers) == num_cached_tickers:
+            mostrecentdate = datetime.datetime.strptime(mostrecentdate, "%Y%m%d-%H%M%S")
+            today = datetime.datetime.today()
+            if (today - mostrecentdate).total_seconds() / 60 < 15: # prices are within 15 min 
+                with open(f"cache/quotes/{files[-1]}", "r") as f:
+                    data = json.load(f)
+                return data["data"]
+
     keys = json.load(open("keys.json"))
 
-    tickers = get_tickers()
     base_URL = "https://eodhistoricaldata.com/api/real-time/"
     prices = []
     for i in range(0, len(tickers), 10):
@@ -30,6 +46,15 @@ def get_stock_prices():
     wrappedQuotes = {}
     for i in range(len(tickers)):
         wrappedQuotes[tickers[i]] = float(prices[i])
+
+    current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    
+    wrapper = {
+        "data": wrappedQuotes,
+    }
+
+    with open(f"cache/quotes/{current_time}_{len(tickers)}.json", "w+") as f:
+        json.dump(wrapper, f)
     
     return wrappedQuotes
 

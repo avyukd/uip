@@ -36,18 +36,18 @@ def get_tickers():
             tickers.append(filename[:-3]) # remove .py
     return tickers
 
-def cached(param: str) -> bool:
-    """
-    Returns True if param is in cache.
-    """
-    pass
+# def cached(param: str) -> bool:
+#     """
+#     Returns True if param is in cache.
+#     """
+#     pass
 
-def load_param_from_cache(param: str) -> Any:
-    """
-    Assumes param is in cache. Loads the param. 
-    May have to wrap in object. Ex: CommodityCurve(RawCachedData)
-    """
-    pass
+# def load_param_from_cache(param: str) -> Any:
+#     """
+#     Assumes param is in cache. Loads the param. 
+#     May have to wrap in object. Ex: CommodityCurve(RawCachedData)
+#     """
+#     pass
 
 
 

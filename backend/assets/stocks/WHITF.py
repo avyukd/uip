@@ -19,19 +19,19 @@ class WHITF(Stock):
         - coal_price is user input or NULL for commodity curve
         - Null for growth rate or multiple means just use one valuation technique
         """
-        if newc_coal_price != "NULL":
+        if int(newc_coal_price) != -1:
             self.coal_curve = [[yr, newc_coal_price] for yr in range(2022, 2027, 1)]
         else:
             self.coal_curve = CommodityCurve(Commodity.NEWC_COAL).get_annual_prices()
 
         self.AUD_curve = CommodityCurve(Forex.AUD).get_annual_prices()
         
-        if thermal_coal_terminal_growth_rate == "NULL":
+        if int(thermal_coal_terminal_growth_rate) == -1:
             self.terminal_growth_rate = None
         else:
             self.terminal_growth_rate = thermal_coal_terminal_growth_rate
 
-        if exit_multiple == "NULL":
+        if int(exit_multiple) == -1:
             self.exit_multiple = None
         else:
             self.exit_multiple = exit_multiple

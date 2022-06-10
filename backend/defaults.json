@@ -2,10 +2,11 @@
     "generics":{
         "tech_terminal_growth_rate":0.02,
         "thermal_coal_terminal_growth_rate":-0.05,
-        "floater_rate":350000,
-        "jackup_rate":110000,
-        "tin_price":40000,
-        "newc_coal_price":"NULL" 
+        "floater_rate":350000.0,
+        "jackup_rate":110000.0,
+        "tin_price":40000.0,
+        "newc_coal_price":-1.0,
+        "margin_of_safety":0.25
     },
     "PLTR":{
         "gov_growth_rate":0.09,
@@ -15,18 +16,18 @@
     "VTNR":{
         "discount_to_crack_spread":0.10,
         "utilization_rate":0.85,
-        "exit_multiple":5
+        "exit_multiple":5.0
     },
     "WHITF":{
-        "exit_multiple":"NULL"
+        "exit_multiple":3.0
     },
     "VAL":{
-        "exit_multiple":5
+        "exit_multiple":5.0
     },
     "AFMJF":{
-        "exit_multiple":5
+        "exit_multiple":5.0
     },
     "DO":{
-        "exit_multiple":5
+        "exit_multiple":5.0
     }
 }
