@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV
+from utils import NPV, exit_TV, discount
 from indicators import get_312_crack_spread
 class VTNR(Stock):
     """
@@ -43,7 +43,7 @@ class VTNR(Stock):
         
         last_yr_EBITDA = fcfs[-1] * (1 / fcf_margins[-1]) * 0.70 # using 0.70 as EBITDA margin
 
-        mcap = NPV(WACC, fcfs) + exit_TV(self.exit_multiple, last_yr_EBITDA) + cash + exmobile_value - debt
+        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, last_yr_EBITDA), WACC, len(fcfs)) + cash + exmobile_value - debt
 
         shs = 94e6 # fully diluted
 

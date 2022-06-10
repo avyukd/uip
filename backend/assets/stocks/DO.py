@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV
+from utils import NPV, exit_TV, discount
 
 class DO(Stock):
     """
@@ -65,7 +65,7 @@ class DO(Stock):
         
         fcfs[0] = -80e6 # 2022 guidance
         
-        mcap = NPV(WACC, fcfs) + exit_TV(self.exit_multiple, ebitdas[-1])
+        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, ebitdas[-1]), WACC, 5)
         shs = 105e6
 
         return mcap / shs

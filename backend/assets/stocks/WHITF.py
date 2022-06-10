@@ -7,7 +7,7 @@ from exceptions import MustSpecifyValuationTechnique
 from base import CommodityCurve, Stock
 from enums import Commodity
 from typing import Union
-from utils import NPV, TV, exit_TV
+from utils import NPV, TV, exit_TV, discount
 
 class WHITF(Stock):
     """
@@ -75,7 +75,7 @@ class WHITF(Stock):
 
         tv = sum(tv_estimates) / len(tv_estimates)
 
-        mcap = npv + tv
+        mcap = npv + discount(tv, WACC, num_yrs)
 
         # TODO: not entirely sure how to convert WHC to WHITF price
         # needs to be converted back to usd

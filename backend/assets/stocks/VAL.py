@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV
+from utils import NPV, exit_TV, discount
 
 class VAL(Stock):
     """
@@ -75,7 +75,7 @@ class VAL(Stock):
         # tax + capex
         fcfs = [ebit * (1 - 0.21) - 225e6 for ebit in ebits]
 
-        mcap = NPV(WACC, fcfs) + exit_TV(self.exit_multiple, ebits[-1])
+        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, ebits[-1]), WACC, 5)
         shs = 75e6
 
         return mcap / shs

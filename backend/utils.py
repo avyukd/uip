@@ -2,6 +2,12 @@
 from typing import Any, List
 import os
 
+def discount(val: float, rate: float, yrs: float) -> float:
+    """
+    Returns discounted value.
+    """
+    return val / (1 + rate) ** yrs
+
 def NPV(discount_rate: float, fcfs: List[float]) -> float:
     """
     Returns net present value of a cash flow series.

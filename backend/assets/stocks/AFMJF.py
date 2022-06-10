@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV
+from utils import NPV, exit_TV, discount
 
 class AFMJF(Stock):
     """
@@ -44,7 +44,7 @@ class AFMJF(Stock):
             ebitda = mpama_north_margin + mpama_south_margin
             fcfs.append(ebitda * (1 - tax_rate) - capex[i])
         
-        mcap = NPV(WACC, fcfs) + exit_TV(self.exit_multiple, ebitda)
+        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, ebitda), WACC, 10)
 
         shs = 1.27e9
 

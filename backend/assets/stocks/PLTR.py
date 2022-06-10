@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, TV
+from utils import NPV, TV, discount
 
 class PLTR(Stock):
     """
@@ -63,7 +63,7 @@ class PLTR(Stock):
 
         wacc, cash, debt = 0.1050, 2.269e9, 500e6
 
-        mcap = NPV(wacc, fcfs) + TV(self.terminal_growth_rate, fcfs[-1], wacc) + cash - debt
+        mcap = NPV(wacc, fcfs) + discount(TV(self.terminal_growth_rate, fcfs[-1], wacc), wacc, 10) + cash - debt
 
         shs = 2e9 * (1 + self.dilution)
 
