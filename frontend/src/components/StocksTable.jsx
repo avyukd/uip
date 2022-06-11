@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const StocksTable = (props) => {
     
@@ -36,13 +37,19 @@ const StocksTable = (props) => {
         return formatPrice(rowData.intrinsic_value);
     }
 
+    const tickerBodyTemplate = (rowData) => {
+        return <Link to={"/stocks/" + rowData.ticker}
+                    style={{textDecoration: 'none', color: '#808080'}}>
+                    {rowData.ticker}</Link>;
+    }
+
     return (
         <div>
             <div className="card">
                 <DataTable value={stocks} responsiveLayout="scroll" size="small"
                     autoLayout="true" resizableColumns="true"
                 >
-                    <Column field="ticker" header="Ticker"></Column>
+                    <Column field="ticker" header="Ticker" body={tickerBodyTemplate}></Column>
                     <Column field="sector" header="Sector"></Column>
                     <Column field="industry" header="Industry"></Column>
                     <Column field="share_price" header="Price" body={priceBodyTemplate}></Column>
