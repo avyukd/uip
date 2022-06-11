@@ -39,7 +39,9 @@ const StocksTable = (props) => {
     return (
         <div>
             <div className="card">
-                <DataTable value={stocks} responsiveLayout="scroll" size="small">
+                <DataTable value={stocks} responsiveLayout="scroll" size="small"
+                    autoLayout="true" resizableColumns="true"
+                >
                     <Column field="ticker" header="Ticker"></Column>
                     <Column field="sector" header="Sector"></Column>
                     <Column field="industry" header="Industry"></Column>

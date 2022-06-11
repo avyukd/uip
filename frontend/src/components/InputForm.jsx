@@ -3,6 +3,8 @@ import {InputText} from 'primereact/inputtext';
 import {Accordion, AccordionTab} from 'primereact/accordion';
 import { useReducer } from "react";
 import { Button } from 'primereact/button';
+import { ScrollPanel } from 'primereact/scrollpanel';
+
 const InputForm = (props) => {
 
     const [tempInputs, updateTempInputs] = 
@@ -38,15 +40,15 @@ const InputForm = (props) => {
     const input_components = Object.keys(props.inputs).map((ticker) => {
         const inner_inputs = Object.keys(props.inputs[ticker]).map((value) => {
             return (
-                <div className="field">
-                    <label className="block">{value}</label>
+                <div>
+                    <label style={{display: "block"}}>{value}</label>
                     <InputText value={tempInputs[ticker][value]}
                         onChange={(event) => handleTextChange(event, ticker, value)}/>
                 </div>
             );
         })
         return (
-            <AccordionTab header={ticker}>
+            <AccordionTab header={ticker} >
                 {inner_inputs}
             </AccordionTab>
         );
@@ -55,11 +57,15 @@ const InputForm = (props) => {
 
     return (
         <>
-            <Accordion>
-                {input_components}
-            </Accordion>
-            <Button label="Submit" icon="pi pi-check" iconPos="right" 
-                   onClick={handleSubmit}
+            <ScrollPanel style={{height: "80%"}}>
+                <Accordion style={{textAlign: "left"}}>
+                    {input_components}
+                </Accordion>
+            </ScrollPanel>
+            <Button label="Submit" className="p-button-outlined p-button-secondary" 
+                onClick={handleSubmit} 
+                //center it
+                style={{marginTop: "10px"}}
             />
         </>  
     );
