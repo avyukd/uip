@@ -15,7 +15,7 @@ class AFMJF(Stock):
         """
         self.tin_price = tin_price
         self.exit_multiple = exit_multiple
-        super().__init__("AFMJF", "Alphamin Resources", "Tin", "Miner", "OTC")
+        super().__init__("AFMJF", "Alphamin Resources", "Tin", "Producer", "OTC")
 
     def get_intrinsic_value(self):
         """

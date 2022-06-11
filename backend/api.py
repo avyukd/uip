@@ -3,6 +3,7 @@ from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from loader import load_all_stocks
 from model import Model
+import json
 
 app = FastAPI()
 
@@ -21,3 +22,13 @@ def load_stocks(model: Model):
     stocks = load_all_stocks(user_input = model.dict())
     stocks.sort(key=lambda x: x["upside"], reverse=True)
     return {"stocks": stocks}
+
+@app.get("/get_defaults")
+def get_defaults():
+    defaults = json.load(open("defaults.json"))
+    return defaults
+
+@app.get("/get_writeup/{ticker}")
+def get_writeup(ticker: str):
+    writeup = open("markdown/" + ticker + ".md").read()
+    return {"writeup": writeup}

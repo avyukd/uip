@@ -10,9 +10,9 @@ APRN also has $25m in net cash. Put these figures together and the liquidation v
 ### Right Tail
 Downside protection established, let's talk about upside potential. I am highly skeptical the following scenarios play out, but if you can get them for free, why not take a position? 
 
-1. Joe Sanberg pulls off a miracle. Blue Apron is Joe Sanberg's <em>personal passion project</em>. He has injected tons of capital into the company and believes Blue Apron is a $100+ stock. Recently did a raise at $12/share (Blue Apron shares were trading at $3-4 at the time). Note Sanberg backstopping APRN is another form of downside protection. If Sanberg can shift sentiment on APRN and clear a path forward, it could catalyze a multiple re-rate (APRN is heavily discounted vs peers like Hello Fresh).
+1. Joe Sanberg pulls off a miracle. Blue Apron is Joe Sanberg's *personal passion project*. He has injected tons of capital into the company and believes Blue Apron is a $100+ stock. Recently did a raise at $12/share (Blue Apron shares were trading at $3-4 at the time). Note Sanberg backstopping APRN is another form of downside protection. If Sanberg can shift sentiment on APRN and clear a path forward, it could catalyze a multiple re-rate (APRN is heavily discounted vs peers like Hello Fresh).
 
-2. Food inflation. Interesting thesis point borrowed from Citron research - grocery stores are 3-4 steps separated from producers where as APRN sources direct - means their prices are cheaper. If food prices start getting crazy (which I believe they likely could), could it lead to a resurgence in meal kits? Why buy expensive groceries when you can get legit meals <em>for cheaper</em> delivered to your door? 
+2. Food inflation. Interesting thesis point borrowed from Citron research - grocery stores are 3-4 steps separated from producers where as APRN sources direct - means their prices are cheaper. If food prices start getting crazy (which I believe they likely could), could it lead to a resurgence in meal kits? Why buy expensive groceries when you can get legit meals *for cheaper* delivered to your door? 
 
 
 ### Risks
