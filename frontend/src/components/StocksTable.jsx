@@ -50,6 +50,7 @@ const StocksTable = (props) => {
                     autoLayout="true" resizableColumns="true"
                 >
                     <Column field="ticker" header="Ticker" body={tickerBodyTemplate}></Column>
+                    <Column field="name" header="Name"></Column>
                     <Column field="sector" header="Sector"></Column>
                     <Column field="industry" header="Industry"></Column>
                     <Column field="share_price" header="Price" body={priceBodyTemplate}></Column>

@@ -20,7 +20,7 @@ const Home = () => {
     }, []); 
 
     return (
-        <Splitter style={{height: "500px", maxWidth: "1000px"}}>
+        <Splitter style={{height: "500px", maxWidth: "1500px"}}>
             <SplitterPanel size={30} style={{textAlign: "center"}}>
                 <InputForm inputs={inputs} updateInputs={updateInputs}/>
             </SplitterPanel>

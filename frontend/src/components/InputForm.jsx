@@ -58,7 +58,7 @@ const InputForm = (props) => {
     return (
         <>
             <ScrollPanel style={{height: "80%"}}>
-                <Accordion style={{textAlign: "left"}}>
+                <Accordion style={{textAlign: "left", border: 'none'}}>
                     {input_components}
                 </Accordion>
             </ScrollPanel>
