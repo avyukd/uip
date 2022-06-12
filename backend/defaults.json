@@ -28,7 +28,6 @@
         "exit_multiple":5.0
     },
     "DO":{
-        "exit_multiple":5.0,
-        "another_test": 0.0
+        "exit_multiple":5.0
     }
 }
