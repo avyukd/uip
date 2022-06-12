@@ -33,17 +33,17 @@ def load_all_stocks(user_input: Dict) -> Dict:
         name = stock_classes[ticker].company_name
         sector = stock_classes[ticker].sector
         industry = stock_classes[ticker].industry        
-        share_price = round(stock_prices[ticker], 2)
+        share_price = stock_prices[ticker]
         intrinsic_value = stock_classes[ticker].get_intrinsic_value() * (1 - margin_of_safety)
-        discount = max(round(1 - share_price / intrinsic_value, 2), 0)
-        upside = round(intrinsic_value / share_price - 1, 2)
+        discount = max(1 - share_price / intrinsic_value, 0)
+        upside = intrinsic_value / share_price - 1
         stocks.append({
             "ticker": ticker,
             "name": name,
             "sector": sector,
             "industry": industry,
             "share_price": share_price,
-            "intrinsic_value": round(intrinsic_value, 2),
+            "intrinsic_value": intrinsic_value,
             "discount": discount,
             "upside": upside
         })

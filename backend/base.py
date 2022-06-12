@@ -12,6 +12,14 @@ from math import log, sqrt, pi, exp
 from scipy.stats import norm
 import numpy as np
 
+# class IdeaSource():
+#     """
+#     Base class for idea sources.
+#     """
+#     def __init__(self, name, link):
+#         self.name = name
+#         self.link = link
+
 class Stock(ABC):
     """
     Stock base class. Inherited by each company in /stocks/*.py.
@@ -25,6 +33,7 @@ class Stock(ABC):
         self.industry = industry
         self.exchange = exchange
         self.company_name = company_name
+        # self.idea_source = idea_source
 
     @abstractmethod
     def get_intrinsic_value(self):
