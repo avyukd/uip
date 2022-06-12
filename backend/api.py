@@ -30,5 +30,8 @@ def get_defaults():
 
 @app.get("/get_writeup/{ticker}")
 def get_writeup(ticker: str):
-    writeup = open("markdown/" + ticker + ".md").read()
-    return {"writeup": writeup}
+    try:
+        writeup = open("markdown/" + ticker + ".md").read()
+        return {"writeup": writeup}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="No writeup found for " + ticker)
