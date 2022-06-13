@@ -34,5 +34,8 @@
     "GLATF" : {
         "exit_multiple":5.0, 
         "debt_mix":0.80
+    },
+    "BNNLF" : {
+        "debt_mix":0.70
     }
 }
