@@ -6,7 +6,8 @@
         "jackup_rate":110000.0,
         "tin_price":40000.0,
         "newc_coal_price":-1.0,
-        "margin_of_safety":0.25
+        "margin_of_safety":0.25,
+        "uranium_price":70
     },
     "PLTR":{
         "gov_growth_rate":0.09,
@@ -29,5 +30,9 @@
     },
     "DO":{
         "exit_multiple":5.0
+    },
+    "GLATF" : {
+        "exit_multiple":5.0, 
+        "debt_mix":0.80
     }
 }
