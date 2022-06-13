@@ -14,15 +14,17 @@ import "primeicons/primeicons.css";                                //icons
 const Home = () => {
     const [inputs, updateInputs] = useReducer((state, updates) => ({...state, ...updates}), {});
 
-    useEffect(async () => {
+    const getDefaults = async () => {
         const response = await axios.get("http://127.0.0.1:8000/get_defaults");
         updateInputs(response.data);
-    }, []); 
+    }
+
+    useEffect(getDefaults, []); 
 
     return (
         <Splitter style={{height: "500px", maxWidth: "1500px"}}>
             <SplitterPanel size={30} style={{textAlign: "center"}}>
-                <InputForm inputs={inputs} updateInputs={updateInputs}/>
+                <InputForm inputs={inputs} updateInputs={updateInputs} getDefaults={getDefaults}/>
             </SplitterPanel>
             <SplitterPanel size={70}>
                 <StocksTable inputs={inputs}/>

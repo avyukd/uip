@@ -29,6 +29,21 @@ const InputForm = (props) => {
         props.updateInputs(tempObj);
     }
 
+    const formatTab = (header) => {
+        if(header == "generics") {
+            return "General";
+        }
+        return header;
+    }
+
+    const formatLabel = (label) => {
+        const words = label.split("_");
+        words.forEach((word, index) => {
+            words[index] = word.charAt(0).toUpperCase() + word.slice(1);
+        });
+        return words.join(" ");
+    }
+
     if (tempInputs === undefined || Object.keys(tempInputs).length == 0) {
         return (
             <div>
@@ -41,14 +56,14 @@ const InputForm = (props) => {
         const inner_inputs = Object.keys(props.inputs[ticker]).map((value) => {
             return (
                 <div>
-                    <label style={{display: "block"}}>{value}</label>
+                    <label style={{display: "block"}}>{formatLabel(value)}</label>
                     <InputText value={tempInputs[ticker][value]}
                         onChange={(event) => handleTextChange(event, ticker, value)}/>
                 </div>
             );
         })
         return (
-            <AccordionTab header={ticker} >
+            <AccordionTab header={formatTab(ticker)} >
                 {inner_inputs}
             </AccordionTab>
         );
