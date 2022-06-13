@@ -15,6 +15,7 @@ class GLATF(Stock):
         """
         self.uranium_price = uranium_price
         self.exit_multiple = exit_multiple
+        self.debt_mix = debt_mix
         super().__init__("GLATF", "Global Atomic", "Uranium", "Developer", "OTC")
 
     def get_intrinsic_value(self):
@@ -49,7 +50,7 @@ class GLATF(Stock):
         expansion_capex = [0] * 1 + [103.8e6] * 2 + [0] * 7 + [50e6] * 2 + [0] * 7
         sustaining_capex = [0] * 3 + [10e6] * 16
 
-        tax_rate = [0] * 5 + 14 # 3 yrs during dev - negative operating profit + 2 yrs of carry over no tax (?)
+        tax_rate = [0] * 5 + [0.30] * 14 # 3 yrs during dev - negative operating profit + 2 yrs of carry over no tax (?)
 
         fcfs = []
         for i in range(num_yrs):
@@ -57,6 +58,8 @@ class GLATF(Stock):
                 fcfs.append(
                     op_profit[i] * (1 - tax_rate[i] - royalties[i]) - expansion_capex[i] - sustaining_capex[i]
                 )
+            else:
+                fcfs.append(op_profit[i] - expansion_capex[i] - sustaining_capex[i])
         
         Dasa = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, op_profit[-1]), WACC, num_yrs)
         Dasa *= 0.9 # global owns 90%
@@ -78,4 +81,6 @@ class GLATF(Stock):
 
         exploration_assets_value = 15e6 # just for geeks, $0.25/lb in the ground
 
-        return (Dasa + zinc_plant_value - debt) / total_shares
+        return (Dasa + zinc_plant_value + exploration_assets_value - debt) / total_shares
+
+print(GLATF(70, 5, 0.8).get_intrinsic_value())
