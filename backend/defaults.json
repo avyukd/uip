@@ -40,5 +40,8 @@
     },
     "UAN" : {
         "exit_multiple":5.0
+    },
+    "PBR" : {
+        "fcf_multiple":2.5
     }
 } 
