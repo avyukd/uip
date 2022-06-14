@@ -37,5 +37,8 @@
     },
     "BNNLF" : {
         "debt_mix":0.70
+    },
+    "UAN" : {
+        "exit_multiple":5.0
     }
 } 
