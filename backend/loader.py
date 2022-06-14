@@ -37,7 +37,10 @@ def load_all_stocks(user_input: Dict) -> Dict:
         intrinsic_value = stock_classes[ticker].get_intrinsic_value() * (1 - margin_of_safety)
         if intrinsic_value < 0:
             intrinsic_value = 0
-        discount = max(1 - share_price / intrinsic_value, 0)
+        if intrinsic_value != 0:
+            discount = max(1 - share_price / intrinsic_value, 0)
+        else:
+            discount = 0
         upside = intrinsic_value / share_price - 1
         stocks.append({
             "ticker": ticker,
