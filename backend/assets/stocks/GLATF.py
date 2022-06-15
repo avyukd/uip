@@ -82,5 +82,3 @@ class GLATF(Stock):
         exploration_assets_value = 15e6 # just for geeks, $0.25/lb in the ground
 
         return (Dasa + zinc_plant_value + exploration_assets_value - debt) / total_shares
-
-print(GLATF(70, 5, 0.8).get_intrinsic_value())

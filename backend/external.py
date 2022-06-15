@@ -9,6 +9,33 @@ from typing import List
 import json 
 import re
 from utils import get_tickers
+from exceptions import NoOptionsFoundForTicker
+
+def get_option_data(ticker: str, expiry: str, strike: float):
+    expiry = expiry.split("-")
+    expiry_nodash = expiry[2][-2:] + expiry[0] + expiry[1]
+
+    expiry_dashed = expiry[2]+"-"+expiry[0]+"-"+expiry[1]
+    
+    strikestr = "{:.3f}".format(strike)
+    while len(strikestr) <= 8:
+        strikestr = "0" + strikestr
+    strikestr = strikestr.replace(".", "")
+
+    option_name = f"{ticker}{expiry_nodash}C{strikestr}"
+    
+    keys = json.load(open("keys.json"))
+    URL = "https://eodhistoricaldata.com/api/options/" + ticker + "?api_token=" + keys["EOD_API_KEY"]
+    chain = requests.get(URL).json()["data"]
+
+    if chain == []:
+        raise NoOptionsFoundForTicker(ticker)
+
+    for optionset in chain:
+        if optionset["expirationDate"] == expiry_dashed:
+            for option in optionset["options"]["CALL"]:
+                if option["contractName"] == option_name:
+                    return option
 
 def get_stock_prices():
     """

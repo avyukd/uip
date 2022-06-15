@@ -1,5 +1,6 @@
 
 from typing import Dict, List
+from pandas import get_option
 
 from yaml import load_all
 from exceptions import InvalidParameterException
@@ -8,14 +9,65 @@ from utils import get_tickers, parse_date
 import json
 import inspect
 from importlib import import_module
-from external import get_stock_prices
+from external import get_stock_prices, get_option_data
 from model import Model
+from base import Option
+
 """
 Load all asset information. Methods are called by API to display on frontend.
 """
 
-def load_all_stocks(user_input: Dict) -> Dict:
+def load_all_options(user_input: Dict) -> Dict:
+    stock_classes = load_all_stock_classes(user_input)
+    options = json.load(open("assets/options/options.json"))
+    
+    trades_to_display = ["long_call"]
 
+    rows = []
+    for trade_type in trades_to_display:
+        for option in options[trade_type]:
+            ticker, expiry, strike, lookback = option["ticker"], option["expiry"], option["strike"], option["lookback"]
+            underlying_value = stock_classes[ticker].get_intrinsic_value()
+
+            option_data = get_option_data(ticker, expiry, strike)
+
+            iv = option["target_iv"]
+            bid = option_data["bid"]
+            ask = option_data["ask"]
+            volume = option_data["volume"]
+            open_interest = option_data["openInterest"]
+            price = ( bid + ask ) / 2
+
+            print(ticker, underlying_value, strike, expiry, lookback, iv)
+
+            if ticker not in stock_classes:
+                raise InvalidParameterException(f"Ticker {ticker} not found in stock classes.")
+            else:
+                intrinsic_value = Option(ticker, underlying_value, strike, expiry, lookback, iv).get_intrinsic_value()
+                if intrinsic_value < 0:
+                    intrinsic_value = 0
+                if intrinsic_value != 0:
+                    discount = max(1 - price / intrinsic_value, 0)
+                else:
+                    discount = 0
+                upside = intrinsic_value / price - 1
+                rows.append({
+                    "ticker": ticker,
+                    "expiry": expiry,
+                    "strike": strike,
+                    "lookback": lookback,
+                    "iv": iv,
+                    "bid": bid,
+                    "ask": ask,
+                    "intrinsic_value": intrinsic_value,
+                    "discount": discount,
+                    "upside": upside,
+                    "volume": volume,
+                    "open_interest": open_interest,
+                })
+    return rows
+
+def load_all_stocks(user_input: Dict) -> Dict:
     # get margin of safety
     defaults = json.load(open("defaults.json"))
     if user_input["generics"] is not None and "margin_of_safety" in user_input["generics"] and user_input["generics"]["margin_of_safety"] is not None:
@@ -54,7 +106,6 @@ def load_all_stocks(user_input: Dict) -> Dict:
         })
     
     return stocks
-
 
 def load_all_stock_classes(user_input: Dict) -> Dict:
     """
@@ -101,4 +152,7 @@ if __name__ == "__main__":
     # print([[k, v.get_intrinsic_value()] for k, v in load_all_stock_classes().items()])
 
     # test stocks object
-    print(json.dumps({"stocks" : load_all_stocks(Model().dict())}))
+    # print(json.dumps({"stocks" : load_all_stocks(Model().dict())}))
+    
+    # test options object
+    print(json.dumps({"options" : load_all_options(Model().dict())}))

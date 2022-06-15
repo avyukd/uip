@@ -1,6 +1,9 @@
 
 from typing import Any, List
 import os
+from math import log, sqrt, pi, exp
+from scipy.stats import norm
+import numpy as np
 
 def discount(val: float, rate: float, yrs: float) -> float:
     """
@@ -72,3 +75,13 @@ def parse_date(date: str) -> str:
         "Dec": "12"
     }
     return month_dict[month] + "." + year
+
+# option pricing
+def d1(S,K,T,r,sigma):
+    return(log(S/K)+(r+sigma**2/2.)*T)/(sigma*sqrt(T))
+
+def d2(S,K,T,r,sigma):
+    return d1(S,K,T,r,sigma)-sigma*sqrt(T)
+
+def bs_call(S,K,T,r,sigma):
+    return S*norm.cdf(d1(S,K,T,r,sigma))-K*exp(-r*T)*norm.cdf(d2(S,K,T,r,sigma))

@@ -1,0 +1,27 @@
+{
+    "long_call" : [
+        {
+            "ticker": "VAL",
+            "expiry": "01-20-2023",
+            "strike": 90,
+            "lookback": "3m",
+            "target_iv":0.50
+        },
+        {
+            "ticker": "PBR",
+            "expiry": "12-20-2024",
+            "strike": 20,
+            "lookback": "6m",
+            "target_iv":0.40
+        }
+    ], 
+    "warrants" : [
+        {
+            "ticker": "VAL.WS",
+            "expiry": "04-29-2028",
+            "strike": 131.88,
+            "lookback": "2y",
+            "target_iv":0.50
+        }
+    ]
+}

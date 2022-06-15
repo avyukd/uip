@@ -8,9 +8,8 @@ from enum import Enum
 from enums import Commodity, Forex
 from collections import defaultdict
 import datetime
-from math import log, sqrt, pi, exp
-from scipy.stats import norm
-import numpy as np
+from exceptions import InvalidParameterException
+from utils import bs_call
 
 class Stock(ABC):
     """
@@ -33,6 +32,42 @@ class Stock(ABC):
         """
         pass
 
+class Option():
+    """
+    Option class.
+    """
+    
+    def __init__(self, underlying_ticker: str, underlying_price: float, strike: float, expiry: str, intrinsic_value_lookback: str, iv: float):
+        """
+        Initializes Option object.
+        """
+        self.underlying_ticker = underlying_ticker
+        self.underlying_price = underlying_price
+        self.strike = strike
+        self.expiry = datetime.datetime.strptime(expiry, "%m-%d-%Y")
+        
+        if intrinsic_value_lookback[-1] == 'd':
+            delta = datetime.timedelta(days=int(intrinsic_value_lookback[:-1]))
+        elif intrinsic_value_lookback[-1] == 'm':
+            delta = datetime.timedelta(days=30 * int(intrinsic_value_lookback[:-1]))
+        elif intrinsic_value_lookback[-1] == 'y':
+            delta = datetime.timedelta(days=365 * int(intrinsic_value_lookback[:-1]))
+        else:
+            raise InvalidParameterException("Invalid intrinsic value lookback.")
+        
+        self.intrinsic_value_date = self.expiry - delta
+        self.iv = iv
+        self.dte = (self.expiry - datetime.datetime.now()).days
+
+
+    def get_intrinsic_value(self):
+        """
+        Returns option's intrinsic value based on BS model.
+        Not conventional use of "intrinsic value" for an option. 
+        """
+        # 1 percent interest rate
+        return bs_call(self.underlying_price, self.strike, (self.intrinsic_value_date - datetime.datetime.now()).days / 365, 0.01, self.iv)
+
 class Fund(ABC):
     """
     Fund base class. 
@@ -50,34 +85,6 @@ class ETF(Fund):
     ETF.
     """
     pass
-
-# class Option(ABC):
-#     """
-#     Option base class.
-#     """
-#     def __init__(self, ticker: str, strike: float, expiry: str):
-#         """
-#         Initializes Option object.
-#         """
-#         self.ticker = ticker
-#         self.strike = strike
-#         self.expiry = datetime.strptime(expiry, "%m-%d-%Y")
-    
-
-# #helper functions
-# def d1(S,K,T,r,sigma):
-#     return(log(S/K)+(r+sigma**2/2.)*T)/(sigma*sqrt(T))
-
-# def d2(S,K,T,r,sigma):
-#     return d1(S,K,T,r,sigma)-sigma*sqrt(T)
-
-# def bs_call(S,K,T,r,sigma):
-#     return S*norm.cdf(d1(S,K,T,r,sigma))-K*exp(-r*T)*norm.cdf(d2(S,K,T,r,sigma))
-
-# #get fair price of option
-# def get_option_price(underlying, strike, interest_rate, time_to_expiration, volatility):
-#     return bs_call(underlying, strike, time_to_expiration, interest_rate, volatility)
-
 
 class FuturesCurve():
     """
