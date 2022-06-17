@@ -21,13 +21,13 @@ def load_all_options(user_input: Dict) -> Dict:
     stock_classes = load_all_stock_classes(user_input)
     options = json.load(open("assets/options/options.json"))
     
-    trades_to_display = ["long_call"]
+    trades_to_display = ["long_call"] # figure out warrants later
 
     rows = []
     for trade_type in trades_to_display:
         for option in options[trade_type]:
             ticker, expiry, strike, lookback = option["ticker"], option["expiry"], option["strike"], option["lookback"]
-            underlying_value = stock_classes[ticker].get_intrinsic_value()
+            underlying_value = stock_classes[ticker].get_intrinsic_value()                
 
             option_data = get_option_data(ticker, expiry, strike)
 
