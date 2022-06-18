@@ -1,0 +1,50 @@
+{
+    "generics": {
+        "tech_terminal_growth_rate": 0.02,
+        "thermal_coal_terminal_growth_rate": -0.05,
+        "floater_rate": 300000.0,
+        "jackup_rate": 110000.0,
+        "tin_price": 30000.0,
+        "newc_coal_price": 150.0,
+        "margin_of_safety": 0.0,
+        "uranium_price": 60
+    },
+    "PLTR": {
+        "gov_growth_rate": 0.09,
+        "comm_growth_rate": 0.45,
+        "dilution": 0.5
+    },
+    "VTNR": {
+        "discount_to_crack_spread": 0.1,
+        "utilization_rate": 0.85,
+        "exit_multiple": 5.0
+    },
+    "WHITF": {
+        "exit_multiple": 2.0
+    },
+    "VAL": {
+        "exit_multiple": 4.0
+    },
+    "AFMJF": {
+        "exit_multiple": 4.0
+    },
+    "DO": {
+        "exit_multiple": 4.0
+    },
+    "GLATF": {
+        "exit_multiple": 3.0,
+        "debt_mix": 0.8
+    },
+    "BNNLF": {
+        "debt_mix": 0.7
+    },
+    "UAN": {
+        "exit_multiple": 4.0
+    },
+    "PBR": {
+        "fcf_multiple": 2.0
+    },
+    "VET": {
+        "fcf_multiple": 5
+    }
+}

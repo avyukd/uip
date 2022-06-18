@@ -13,9 +13,6 @@ from exceptions import NoOptionsFoundForTicker
 import yfinance as yf
 
 def get_option_data(ticker: str, expiry: str, strike: float):
-
-    
-
     expiry = expiry.split("-")
     expiry_nodash = expiry[2][-2:] + expiry[0] + expiry[1]
 
@@ -27,6 +24,20 @@ def get_option_data(ticker: str, expiry: str, strike: float):
     strikestr = strikestr.replace(".", "")
 
     option_name = f"{ticker}{expiry_nodash}C{strikestr}"
+
+    if not os.path.exists(f"cache/options/{option_name}"):
+        os.makedirs(f"cache/options/{option_name}")
+    
+    files = os.listdir(f"cache/options/{option_name}")
+    files.sort()
+    if len(files) > 0:
+        mostrecentdate = files[-1].split(".")[0]
+        mostrecentdate = datetime.datetime.strptime(mostrecentdate, "%Y%m%d-%H%M%S")
+        today = datetime.datetime.today()
+        if (today - mostrecentdate).total_seconds() / 60 < 15: # prices are within 15 min 
+            with open(f"cache/options/{option_name}/{files[-1]}", "r") as f:
+                data = json.load(f)
+            return data["data"]
     
     keys = json.load(open("keys.json"))
     URL = "https://eodhistoricaldata.com/api/options/" + ticker + "?api_token=" + keys["EOD_API_KEY"]
@@ -40,7 +51,7 @@ def get_option_data(ticker: str, expiry: str, strike: float):
             for option in optionset["options"]["CALL"]:
                 if option["contractName"] == option_name:
                     current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-                    with open(f"cache/options/{current_time}_{strikestr}.json", "w+") as f:
+                    with open(f"cache/options/{option_name}/{current_time}.json", "w+") as f:
                         json.dump({"data": option}, f)
                     return option
 

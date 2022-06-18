@@ -1,22 +1,54 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {InputText} from 'primereact/inputtext';
 import {Accordion, AccordionTab} from 'primereact/accordion';
 import { useReducer } from "react";
 import { Button } from 'primereact/button';
 import { ScrollPanel } from 'primereact/scrollpanel';
+import { Dialog } from 'primereact/dialog';
+import { Dropdown } from 'primereact/dropdown';
+import axios from 'axios';
 
 const InputForm = (props) => {
 
     const [tempInputs, updateTempInputs] = 
         useReducer((state, updates) => ({...state, ...updates}), {});
+    
+    const [scenarioName, setScenarioName] = useState("Scenario Name");
+
+    const [displayResponsive, setDisplayResponsive] = useState(false);
+
+    const [scenarioItems, setScenarioItems] = useState([]);
+
+    const [chosenScenario, setChosenScenario] = useState(null);
+
+    const [scenarioCreatedFlag, setScenarioCreatedFlag] = useState(false);
 
     useEffect(() => {
         updateTempInputs(props.inputs);
     }, [props]);
 
+    useEffect(async () => {
+        const response = await axios.get("http://127.0.0.1:8000/load_all_scenarios");
+        const scenarios = response.data.scenarios.map(scenario => ({
+            label: scenario,
+            value: scenario
+        }))
+        setScenarioItems(scenarios);
+        setScenarioCreatedFlag(false);
+    }, [chosenScenario, scenarioCreatedFlag]);
+
     const handleTextChange = (event, ticker, label) => {
         updateTempInputs({[ticker]: {...tempInputs[ticker], 
             [label]: event.target.value}});
+    }
+
+    const saveScenario = async () => {
+        const response = await axios.post("http://127.0.0.1:8000/save_scenario", props.inputs,
+            {params: {
+                name: scenarioName
+            }});
+        setScenarioCreatedFlag(true);
+        setDisplayResponsive(false);
     }
 
     const handleSubmit = () => {
@@ -27,6 +59,20 @@ const InputForm = (props) => {
             });
         });
         props.updateInputs(tempObj);
+    }
+
+    const handleReset = () => {
+        props.getDefaults();
+    }
+
+    const handleScenarioDelete = async () => {
+        const response = await axios.delete("http://127.0.0.1:8000/delete_scenario/" + chosenScenario);
+        setChosenScenario(null);
+    }
+
+    const loadScenario = async () => {
+        const response = await axios.get("http://127.0.0.1:8000/load_scenario/" + chosenScenario);
+        props.updateInputs(response.data);
     }
 
     const formatTab = (header) => {
@@ -69,19 +115,46 @@ const InputForm = (props) => {
         );
     });
 
-
     return (
         <>
+            <span className="p-toolbar">
+                <Button icon="pi pi-trash" className="p-button-outlined p-button-secondary"
+                onClick={handleScenarioDelete}
+                />
+                <Dropdown optionLabel="label" options={scenarioItems}
+                    onChange={(event) => {
+                        setChosenScenario(event.value);
+                    }}
+                    placeholder="Select Scenario"
+                    value={chosenScenario}
+                />
+                <Button icon="pi pi-download" className="p-button-outlined p-button-secondary"
+                onClick={loadScenario}
+                />
+            </span>
             <ScrollPanel style={{height: "80%"}}>
                 <Accordion style={{textAlign: "left", border: 'none'}}>
                     {input_components}
                 </Accordion>
             </ScrollPanel>
-            <Button label="Submit" className="p-button-outlined p-button-secondary" 
-                onClick={handleSubmit} 
-                //center it
-                style={{marginTop: "10px"}}
-            />
+            <span className="p-buttonset" >
+                <Button icon="pi pi-save" className="p-button-outlined p-button-secondary" 
+                    onClick={() => setDisplayResponsive(true)}/> 
+                <Button label="Submit" className="p-button-outlined p-button-secondary" 
+                        onClick={handleSubmit} style={{marginTop: "10px"}}
+                />
+                <Button icon="pi pi-refresh" className="p-button-outlined p-button-secondary"
+                    onClick={handleReset}
+                />
+            </span>
+            <Dialog header="Save scenario" visible={displayResponsive} onHide={() => setDisplayResponsive(false)} breakpoints={{'960px': '75vw'}} style={{width: '50vw'}}>
+                <span>
+                    <InputText value={scenarioName} onChange={(event) => setScenarioName(event.target.value)}/>
+                    <Button icon="pi pi-check" className="p-button-outlined p-button-secondary"
+                        onClick={saveScenario}
+                    />
+                </span>
+            </Dialog>        
         </>  
     );
 }

@@ -22,7 +22,7 @@ class VET(Stock):
         Use FCF estimates out to 2024.
         """
         fcfs = [1.8e9, 1.0e9, 1.0e9]
-        mcap = NPV(0.10, fcfs) + discount(fcfs[-1] * self.fcf_multiple) - 1.6e9
+        mcap = NPV(0.10, fcfs) + discount(fcfs[-1] * self.fcf_multiple, 0.10, 2) - 1.6e9
         shs = 170e6
         cadusd = 0.77
         return (mcap * cadusd) / shs

@@ -39,6 +39,22 @@ def get_tickers():
             tickers.append(filename[:-3]) # remove .py
     return tickers
 
+def delete_scenario(name: str):
+    """
+    Deletes scenario with given name.
+    """
+    os.remove(f"scenarios/{name}.json")
+
+def get_scenarios():
+    """
+    Returns list of all scenarios in /scenarios/*.py.
+    """
+    scenarios = []
+    for filename in os.listdir("scenarios/"):
+        if filename[-5:] == ".json":
+            scenarios.append(filename[:-5]) # remove .json
+    return scenarios
+
 # def cached(param: str) -> bool:
 #     """
 #     Returns True if param is in cache.

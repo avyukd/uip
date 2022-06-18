@@ -3,7 +3,7 @@ from typing import Dict, List
 from pandas import get_option
 
 from yaml import load_all
-from exceptions import InvalidParameterException
+from exceptions import InvalidParameterException, NoOptionsFoundForTicker
 from assets.stocks import *
 from utils import get_tickers, parse_date
 import json
@@ -16,6 +16,23 @@ from base import Option
 """
 Load all asset information. Methods are called by API to display on frontend.
 """
+
+def save_scenario(user_input: Dict, name: str) -> None:
+    # if file doesn't exist create it
+
+    with open(f"scenarios/{name}.json", "w+", encoding="utf-8") as f:
+        json.dump(user_input, f, ensure_ascii=False, indent=4)
+
+def load_scenario(name: str) -> Dict:
+    with open(f"scenarios/{name}.json", "r", encoding="utf-8") as f:
+        scenario_model = json.load(f)
+    defaults = json.load(open("defaults.json"))
+
+    for key in defaults:
+        if key not in scenario_model:
+            scenario_model[key] = defaults[key]
+    
+    return scenario_model
 
 def load_all_options(user_input: Dict) -> Dict:
     stock_classes = load_all_stock_classes(user_input)
@@ -31,40 +48,43 @@ def load_all_options(user_input: Dict) -> Dict:
 
             option_data = get_option_data(ticker, expiry, strike)
 
-            iv = option["target_iv"]
-            bid = option_data["bid"]
-            ask = option_data["ask"]
-            volume = option_data["volume"]
-            open_interest = option_data["openInterest"]
-            price = ( bid + ask ) / 2
+            if option_data is not None:
+                iv = option["target_iv"]
+                bid = option_data["bid"]
+                ask = option_data["ask"]
+                volume = option_data["volume"]
+                open_interest = option_data["openInterest"]
+                price = ( bid + ask ) / 2
 
-            print(ticker, underlying_value, strike, expiry, lookback, iv)
+                print(ticker, underlying_value, strike, expiry, lookback, iv)
 
-            if ticker not in stock_classes:
-                raise InvalidParameterException(f"Ticker {ticker} not found in stock classes.")
-            else:
-                intrinsic_value = Option(ticker, underlying_value, strike, expiry, lookback, iv).get_intrinsic_value()
-                if intrinsic_value < 0:
-                    intrinsic_value = 0
-                if intrinsic_value != 0:
-                    discount = max(1 - price / intrinsic_value, 0)
+                if ticker not in stock_classes:
+                    raise InvalidParameterException(f"Ticker {ticker} not found in stock classes.")
                 else:
-                    discount = 0
-                upside = intrinsic_value / price - 1
-                rows.append({
-                    "ticker": ticker,
-                    "expiry": expiry,
-                    "strike": strike,
-                    "lookback": lookback,
-                    "iv": iv,
-                    "bid": bid,
-                    "ask": ask,
-                    "intrinsic_value": intrinsic_value,
-                    "discount": discount,
-                    "upside": upside,
-                    "volume": volume,
-                    "open_interest": open_interest,
-                })
+                    intrinsic_value = Option(ticker, underlying_value, strike, expiry, lookback, iv).get_intrinsic_value()
+                    if intrinsic_value < 0:
+                        intrinsic_value = 0
+                    if intrinsic_value != 0:
+                        discount = max(1 - price / intrinsic_value, 0)
+                    else:
+                        discount = 0
+                    upside = intrinsic_value / price - 1
+                    rows.append({
+                        "ticker": ticker,
+                        "expiry": expiry,
+                        "strike": strike,
+                        "lookback": lookback,
+                        "iv": iv,
+                        "bid": bid,
+                        "ask": ask,
+                        "intrinsic_value": intrinsic_value,
+                        "discount": discount,
+                        "upside": upside,
+                        "volume": volume,
+                        "open_interest": open_interest,
+                    })
+            else:
+                raise NoOptionsFoundForTicker(f"No options found for {ticker}.")
     return rows
 
 def load_all_stocks(user_input: Dict) -> Dict:

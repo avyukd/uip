@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Query, Depends, HTTPException
 from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
-from loader import load_all_stocks
+from loader import load_all_options, load_all_stocks, save_scenario, load_scenario
 from model import Model
 import json
+
+from utils import delete_scenario, get_scenarios
 
 app = FastAPI()
 
@@ -15,6 +17,36 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/save_scenario")
+def save_scenario_endpoint(model: Model, name: str):
+    save_scenario(model.dict(), name)
+    return {"status": "success"}
+
+@app.get("/load_scenario/{name}")
+def load_scenario_endpoint(name: str):
+    try:
+        return load_scenario(name)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Scenario not found.")
+
+@app.get("/load_all_scenarios")
+def load_all_scenarios():
+    return {"scenarios": get_scenarios()}
+
+@app.delete("/delete_scenario/{name}")
+def delete_scenario_endpoint(name: str):
+    try:
+        delete_scenario(name)
+        return {"status": "success"} 
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Scenario not found.")
+
+@app.post("/load_options")
+def load_options(model: Model):
+    options = load_all_options(user_input=model.dict())
+    options.sort(key=lambda x: x["upside"], reverse=True)
+    return {"options": options}
 
 @app.post("/load_stocks")
 def load_stocks(model: Model):
