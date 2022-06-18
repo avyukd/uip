@@ -5,7 +5,7 @@ from pandas import get_option
 from yaml import load_all
 from exceptions import InvalidParameterException, NoOptionsFoundForTicker
 from assets.stocks import *
-from utils import get_tickers, parse_date
+from utils import get_tickers, parse_date, build_indicators
 import json
 import inspect
 from importlib import import_module
@@ -113,6 +113,8 @@ def load_all_stocks(user_input: Dict) -> Dict:
             discount = max(1 - share_price / intrinsic_value, 0)
         else:
             discount = 0
+        detail = stock_classes[ticker].detail
+        custom_indicators = build_indicators(detail, share_price)
         upside = intrinsic_value / share_price - 1
         stocks.append({
             "ticker": ticker,
@@ -122,7 +124,8 @@ def load_all_stocks(user_input: Dict) -> Dict:
             "share_price": share_price,
             "intrinsic_value": intrinsic_value,
             "discount": discount,
-            "upside": upside
+            "upside": upside,
+            "custom_indicators": custom_indicators
         })
     
     return stocks
@@ -175,4 +178,10 @@ if __name__ == "__main__":
     # print(json.dumps({"stocks" : load_all_stocks(Model().dict())}))
     
     # test options object
-    print(json.dumps({"options" : load_all_options(Model().dict())}))
+    # print(json.dumps({"options" : load_all_options(Model().dict())}))
+
+    # test details factory
+    classes = load_all_stock_classes(Model().dict())
+    for ticker in classes:
+        classes[ticker].get_intrinsic_value()
+        print(ticker, classes[ticker].detail)

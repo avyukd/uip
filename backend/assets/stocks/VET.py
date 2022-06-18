@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, discount
+from utils import NPV, discount, detail_factory
 
 class VET(Stock):
     """
@@ -23,6 +23,10 @@ class VET(Stock):
         """
         fcfs = [1.8e9, 1.0e9, 1.0e9]
         mcap = NPV(0.10, fcfs) + discount(fcfs[-1] * self.fcf_multiple, 0.10, 2) - 1.6e9
-        shs = 170e6
+        self.shs = 170e6
         cadusd = 0.77
-        return (mcap * cadusd) / shs
+        self.fcfs = [cadusd * fcf for fcf in fcfs]
+
+        detail_factory(self)
+
+        return (mcap * cadusd) / self.shs

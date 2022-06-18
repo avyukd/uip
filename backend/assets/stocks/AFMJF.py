@@ -2,8 +2,8 @@ import sys
 
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
-from base import Stock
-from utils import NPV, exit_TV, discount
+from base import Stock, Detail
+from utils import NPV, exit_TV, discount, detail_factory
 
 class AFMJF(Stock):
     """
@@ -26,9 +26,9 @@ class AFMJF(Stock):
 
         # 10 yr build to 2032, exit_TV since Mpama South will be around
 
-        fcfs = []
+        self.fcfs = []
         fcf_2022 = 200e6
-        fcfs.append(fcf_2022)
+        self.fcfs.append(fcf_2022)
 
         mpama_north_production = [15, 16, 16, 17, 14, 16, 9, 7, 8, 7, 2]
         mpama_south_production = [0] * 4 + [3] + [7] * 6
@@ -37,15 +37,23 @@ class AFMJF(Stock):
         tax_rate = 0.35
 
         capex = [30e6] * 3 + [150e6] + [30e6] * 7
-
+        
+        # want ev / ebitda to be based on 2023E so sensitive to tin price...
+        self.ebitdas = []
+        
         for i in range(1, 11):
             mpama_north_margin = mpama_north_production[i] * 1000 * (self.tin_price - mpama_north_AISC)
             mpama_south_margin = mpama_south_production[i] * 1000 * (self.tin_price - mpama_south_AISC)
             ebitda = mpama_north_margin + mpama_south_margin
-            fcfs.append(ebitda * (1 - tax_rate) - capex[i])
+            self.ebitdas.append(ebitda)
+            self.fcfs.append(ebitda * (1 - tax_rate) - capex[i])
         
-        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, ebitda), WACC, 10)
+        mcap = NPV(WACC, self.fcfs) + discount(exit_TV(self.exit_multiple, ebitda), WACC, 10)
 
-        shs = 1.27e9
+        self.shs = 1.27e9
 
-        return mcap / shs
+        self.net_cash = 140e6 - 93e6
+
+        detail_factory(self)
+
+        return mcap / self.shs

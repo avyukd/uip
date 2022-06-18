@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV, discount
+from utils import NPV, exit_TV, discount, detail_factory
 
 class DO(Stock):
     """
@@ -24,6 +24,7 @@ class DO(Stock):
         """
         WACC = 0.10
         net_debt = 222e6
+        self.net_cash = -net_debt
 
         # 5 yr build -- starts from 2022
         drillships = [4] * 5
@@ -55,17 +56,19 @@ class DO(Stock):
         
         sga = 50e6
 
-        ebitdas = []
+        self.ebitdas = []
         for i in range(5):
             ebitda = revenues[i] - contract_drilling_costs[i] - sga
-            ebitdas.append(ebitda)
+            self.ebitdas.append(ebitda)
 
         # tax + capex
-        fcfs = [ebitda * (1 - 0.21) - 60e6 for ebitda in ebitdas]
+        fcfs = [ebitda * (1 - 0.21) - 60e6 for ebitda in self.ebitdas]
         
         fcfs[0] = -80e6 # 2022 guidance
         
-        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, ebitdas[-1]), WACC, 5)
+        mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, self.ebitdas[-1]), WACC, 5)
         shs = 105e6
+
+        detail_factory(self)
 
         return mcap / shs

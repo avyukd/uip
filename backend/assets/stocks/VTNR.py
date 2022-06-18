@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import NPV, exit_TV, discount
+from utils import NPV, exit_TV, discount, detail_factory
 from indicators import get_312_crack_spread
 class VTNR(Stock):
     """
@@ -23,6 +23,8 @@ class VTNR(Stock):
         Returns company's intrinsic value based on DCF valuation.
         All numbers are up to date as of 6/5/2022
         """
+        #TODO: this should probably be changed to using opex + capex NOT fcf margins
+
         WACC = 0.10
         cash, debt, exmobile_value = 24e6, 1e6, 200e6 # current portion of long-term debt, value of business - mobile refinery
         
@@ -45,6 +47,11 @@ class VTNR(Stock):
 
         mcap = NPV(WACC, fcfs) + discount(exit_TV(self.exit_multiple, last_yr_EBITDA), WACC, len(fcfs)) + cash + exmobile_value - debt
 
-        shs = 94e6 # fully diluted
+        self.shs = 94e6 # fully diluted
+        self.fcf = fcfs[1] # 2023 fcf basically
 
-        return mcap / shs
+        self.net_cash = cash - debt
+
+        detail_factory(self)
+
+        return mcap / self.shs

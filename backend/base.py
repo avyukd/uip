@@ -10,6 +10,8 @@ from collections import defaultdict
 import datetime
 from exceptions import InvalidParameterException
 from utils import bs_call
+from pydantic import BaseModel
+from typing import Optional, Dict
 
 class Stock(ABC):
     """
@@ -24,6 +26,7 @@ class Stock(ABC):
         self.industry = industry
         self.exchange = exchange
         self.company_name = company_name
+        self.detail = Detail().dict()
 
     @abstractmethod
     def get_intrinsic_value(self):
@@ -31,6 +34,13 @@ class Stock(ABC):
         Returns company's intrinsic value based on DCF valuation.
         """
         pass
+
+class Detail(BaseModel):
+    fcf_ps: Optional[float] = None
+    div_ps: Optional[float] = None
+    net_cash: Optional[float] = None
+    ebitda: Optional[float] = None
+    shs: Optional[float] = None
 
 class Option():
     """

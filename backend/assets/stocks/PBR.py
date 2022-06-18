@@ -3,6 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
+from utils import detail_factory
 
 class PBR(Stock):
     """
@@ -19,7 +20,10 @@ class PBR(Stock):
         """
         Not a complete model.
         """
-        fcf = 30e9
-        value = fcf * self.fcf_multiple
-        shs = 6.522e9
-        return value / shs
+        self.fcf = 30e9
+        value = self.fcf * self.fcf_multiple
+        self.shs = 6.522e9
+
+        detail_factory(self)
+        
+        return value / self.shs

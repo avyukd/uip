@@ -1,5 +1,5 @@
 
-from typing import Any, List
+from typing import Any, Dict, List
 import os
 from math import log, sqrt, pi, exp
 from scipy.stats import norm
@@ -101,3 +101,55 @@ def d2(S,K,T,r,sigma):
 
 def bs_call(S,K,T,r,sigma):
     return S*norm.cdf(d1(S,K,T,r,sigma))-K*exp(-r*T)*norm.cdf(d2(S,K,T,r,sigma))
+
+# pass in self object + list of details to populate
+# need to make fcfs and stuff like that in self, need standard vocabulary
+def detail_factory(class_obj):
+    vars = class_obj.__dict__
+
+    for key in class_obj.detail:
+        if key in vars:
+            class_obj.detail[key] = vars[key]
+
+    if "shs" in vars:
+        class_obj.detail["shs"] = class_obj.shs
+        if "fcfs" in vars:
+            class_obj.detail["fcf_ps"] = class_obj.fcfs[0] / class_obj.shs
+        elif "fcf" in vars:
+            class_obj.detail["fcf_ps"] = class_obj.fcf / class_obj.shs
+        
+        if "divs" in vars:
+            class_obj.detail["div_ps"] = class_obj.divs[0] / class_obj.shs
+        elif "div" in vars:
+            class_obj.detail["div_ps"] = class_obj.div[0] / class_obj.shs
+
+    if "cash" in vars and "debt" in vars:
+        class_obj.detail["net_cash"] = class_obj.cash - class_obj.debt
+    elif "cash" in vars and "current_debt" in vars:
+        class_obj.detail["net_cash"] = class_obj.cash - class_obj.current_debt
+
+    
+    if "ebitdas" in vars:
+        class_obj.detail["ebitda"] = class_obj.ebitdas[0]
+    elif "ebitda" in vars:
+        class_obj.detail["ebitda"] = class_obj.ebitda
+
+def build_indicators(detail: Dict, share_price: float):
+    """
+    Returns dictionary of indicators for given ticker.
+    """
+    indicators = {}
+    if detail["fcf_ps"] is not None:
+        indicators["fcf_yield"] = detail["fcf_ps"] / share_price
+    if detail["div_ps"] is not None:
+        indicators["div_yield"] = detail["div_ps"] / share_price
+    if detail["ebitda"] is not None and detail["shs"] is not None and detail["net_cash"] is not None:
+        ev = share_price * detail["shs"] - detail["net_cash"]
+        indicators["ev_ebitda"] = ev / detail["ebitda"]
+    if detail["net_cash"] is not None:
+        if detail["net_cash"] > 0:
+            indicators["net_cash"] = True
+        if detail["shs"] is not None:
+            if detail["net_cash"] > share_price * detail["shs"]:
+                indicators["negative_EV"] = True
+    return indicators

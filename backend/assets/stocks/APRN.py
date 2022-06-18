@@ -3,7 +3,7 @@ import sys
 sys.path.append("C:/Users/avyuk/stocks/uip/backend/")
 
 from base import Stock
-from utils import exit_TV, discount
+from utils import exit_TV, discount, detail_factory
 
 class APRN(Stock):
     """
@@ -19,7 +19,7 @@ class APRN(Stock):
         """
         Returns APRN's intrinsic value.
         """
-        net_cash = 55e6 - 30e6
+        self.net_cash = 55e6 - 30e6
         nj_facility = 75e6 # conservative estimate of new jersey facility, 495000 sq ft
         # note that liquidation value of fairfield center, other property not included here
 
@@ -35,7 +35,9 @@ class APRN(Stock):
         tv = discount(exit_TV(multiple, long_term_ebitda), 0.10, 5)
 
         # discount it back and add everything up
-        mcap = tv + net_cash + nj_facility
+        mcap = tv + self.net_cash + nj_facility
         shs = 34.37e6 * (1 + 0.5) # 50% dilution
+
+        detail_factory(self)
 
         return mcap / shs
