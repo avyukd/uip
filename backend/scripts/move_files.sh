@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mv ../files/* ../../../../avyukd.github.io/files/
-cd ../../../../avyukd.github.io
+cp files/* ../../../avyukd.github.io/files/
+cd ../../../avyukd.github.io
 git add .
 git commit -m "[auto] new files added"
 git push
