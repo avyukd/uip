@@ -3,17 +3,61 @@ UIP asset base classes.
 """
 
 from abc import ABC, abstractmethod
-from external import get_curve
+from external import get_curve, get_stock_prices
 from enum import Enum
-from enums import Commodity, Forex
+from enums import Commodity, Forex, Direction
 from collections import defaultdict
 import datetime
 from exceptions import InvalidParameterException
-from utils import bs_call
+from utils import bs_call, get_option_name
 from pydantic import BaseModel
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
-class Stock(ABC):
+class Asset(ABC):
+    """
+    Asset base class. All assets have an intrinisic value.
+    """
+    @abstractmethod
+    def get_intrinsic_value(self):
+        """
+        Return intrinsic value of the asset
+        """
+        pass
+    
+    @abstractmethod
+    def get_asset_name(self):
+        """
+        Return name of the asset
+        """
+        pass
+    
+    def __repr__(self) -> str:
+        return self.get_asset_name()
+
+class DummyAsset(Asset):
+    """
+    Dummy asset. 
+    """
+    def __init__(self, asset_name: str):
+        self.asset_name = asset_name
+    
+    def get_asset_name(self):
+        return self.asset_name
+    
+    def get_intrinsic_value(self):
+        return 0.0
+
+class Cash(Asset):
+    """
+    Cash.
+    """
+    def get_intrinsic_value(self):
+        return 1.0
+    
+    def get_asset_name(self):
+        return "Cash"
+
+class Stock(Asset):
     """
     Stock base class. Inherited by each company in /stocks/*.py.
     """
@@ -28,12 +72,15 @@ class Stock(ABC):
         self.company_name = company_name
         self.detail = Detail().dict()
 
-    @abstractmethod
-    def get_intrinsic_value(self):
-        """
-        Returns company's intrinsic value based on DCF valuation.
-        """
-        pass
+    # @abstractmethod
+    # def get_intrinsic_value(self):
+    #     """
+    #     Returns company's intrinsic value based on DCF valuation.
+    #     """
+    #     pass
+
+    def get_asset_name(self):
+        return self.ticker
 
 class Detail(BaseModel):
     fcf_ps: Optional[float] = None
@@ -42,7 +89,7 @@ class Detail(BaseModel):
     ebitda: Optional[float] = None
     shs: Optional[float] = None
 
-class Option():
+class Option(Asset):
     """
     Option class.
     """
@@ -77,8 +124,11 @@ class Option():
         """
         # 1 percent interest rate
         return bs_call(self.underlying_price, self.strike, (self.intrinsic_value_date - datetime.datetime.now()).days / 365, 0.01, self.iv)
+    
+    def get_asset_name(self):
+        return get_option_name(self.underlying_ticker, self.strike, self.expiry)
 
-class Fund(ABC):
+class Fund(Asset):
     """
     Fund base class. 
     """
@@ -96,6 +146,48 @@ class ETF(Fund):
     """
     pass
 
+class Position():
+    # everything here is on a per share basis
+    def __init__(self, direction: Direction, asset: Asset, cost_basis: float, price: float, num_shares: float):
+        self.direction = direction
+        self.asset = asset
+        self.price = price
+        self.intrinsic_value = max(asset.get_intrinsic_value(), 0)
+        self.cost_basis = cost_basis
+        self.num_shares = num_shares
+        self.change = (self.price - self.cost_basis) / self.cost_basis
+        self.unrealized = self.change * num_shares
+        # upside vs cost basis
+        # discount vs cost basis
+
+class Portfolio():
+    def __init__(self, positions: List[Position]):
+        self.positions = positions
+        self.cash = 0.0
+        for position in positions:
+            if str(position.asset) == "Cash":
+                self.cash = position.num_shares * position.price
+    
+    def get_current_value(self):
+        return sum([p.price * p.num_shares for p in self.positions])
+    
+    def get_intrinsic_value(self): 
+        return sum([p.intrinsic_value * p.num_shares for p in self.positions])
+    
+    def get_cost_basis_value(self):
+        return sum([p.cost_basis * p.num_shares for p in self.positions])
+
+    def pct_cost_basis(self):
+        total_value = self.get_cost_basis_value()
+        return {str(p.asset): (p.cost_basis * p.num_shares) / total_value for p in self.positions}
+    
+    def pct_current(self):
+        total_value = self.get_current_value()
+        return {str(p.asset): (p.price * p.num_shares) / total_value for p in self.positions}
+
+    def get_pct_cash(self):
+        return self.cash / self.get_current_value()
+        
 class FuturesCurve():
     """
     Futures curve.

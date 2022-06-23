@@ -5,13 +5,14 @@ from pandas import get_option
 from yaml import load_all
 from exceptions import InvalidParameterException, NoOptionsFoundForTicker
 from assets.stocks import *
-from utils import get_tickers, parse_date, build_indicators
+from utils import get_tickers, read_fidelity_csv, parse_date, build_indicators
 import json
 import inspect
 from importlib import import_module
-from external import get_stock_prices, get_option_data
+from external import get_stock_prices, get_option_data, get_unknown_asset_price
 from model import Model
-from base import Option
+from base import Cash, Option, Position, Portfolio, DummyAsset
+from enums import Direction
 
 """
 Load all asset information. Methods are called by API to display on frontend.
@@ -169,6 +170,32 @@ def load_all_stock_classes(user_input: Dict) -> Dict:
     
     return stock_classes
 
+def load_portfolio_from_csv(user_input: Dict, filename: str) -> Portfolio:
+    # has columns Symbol, Quantity, Cost Basis, Cost Basis Per Share
+    df = read_fidelity_csv(filename)
+    # TODO: extend to options 
+
+    known_tickers = get_tickers()
+    stock_classes = load_all_stock_classes(user_input)
+    stock_prices = get_stock_prices()
+
+    positions = []
+    for index, row in df.iterrows():
+        asset_name = row["Symbol"].upper()
+        if asset_name == "CASH":
+            positions.append(Position(Direction.NA, Cash(), 1.0, 1.0, row["Quantity"]))
+        else:
+            # assume asset is a stock for now
+            if asset_name in known_tickers:
+                positions.append(Position(Direction.LONG, stock_classes[asset_name],
+                    row["Cost Basis Per Share"], stock_prices[asset_name], row["Quantity"]))
+            else:
+                asset = DummyAsset(asset_name)
+                price = get_unknown_asset_price(asset_name)
+                positions.append(Position(Direction.LONG, asset,
+                    row["Cost Basis Per Share"], price, row["Quantity"]))
+    
+    return Portfolio(positions)
 
 if __name__ == "__main__":
     # test intrinsic values
@@ -181,7 +208,16 @@ if __name__ == "__main__":
     # print(json.dumps({"options" : load_all_options(Model().dict())}))
 
     # test details factory
-    classes = load_all_stock_classes(Model().dict())
-    for ticker in classes:
-        classes[ticker].get_intrinsic_value()
-        print(ticker, classes[ticker].detail)
+    # classes = load_all_stock_classes(Model().dict())
+    # for ticker in classes:
+    #     classes[ticker].get_intrinsic_value()
+    #     print(ticker, classes[ticker].detail)
+
+    # test portfolio object
+    portfolio = load_portfolio_from_csv(Model().dict(), "tmp/tst.csv")
+    print({
+        "positions": [str(p.asset) for p in portfolio.positions],
+        "current_value": portfolio.get_current_value(),
+        "pct_current" : portfolio.pct_current(),
+        "pct_cash": portfolio.get_pct_cash(),
+    })

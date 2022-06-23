@@ -1,0 +1,29 @@
+﻿Account Number,Account Name,Symbol,Description,Quantity,Last Price,Last Price Change,Current Value,Today's Gain/Loss Dollar,Today's Gain/Loss Percent,Total Gain/Loss Dollar,Total Gain/Loss Percent,Percent Of Account,Cost Basis,Cost Basis Per Share,Type
+233556441,ROTH IRA,SPAXX**,FIDELITY GOVERNMENT MONEY MARKET,2383.31,$1.00 ,$0.00 ,"$2,383.31 ",n/a,n/a,n/a,n/a,25.50%,n/a,n/a,Cash
+233556441,ROTH IRA,GLATF,GLOBAL ATOMIC CORPORATION COM NPV ISIN #CA37957M1068 SEDOL #BF11BK3,200,$2.32 ,$0.22 ,$464.00 ,$43.24 ,10.27%,$75.00 ,19.28%,4.97%,$389.00 ,$1.95 ,Cash
+233556441,ROTH IRA,SRUUF,SPROTT PHYSICAL URANIUM TR TRUST UNIT CAD ISIN #CA85210A1049 SEDOL #BNZKG52,600,$10.83 ,$0.54 ,"$6,498.00 ",$324.48 ,5.25%,($745.84),-10.30%,69.53%,"$7,243.84 ",$12.07 ,Cash
+233643678,TRADITIONAL IRA,SPAXX**,FIDELITY GOVERNMENT MONEY MARKET,67460.61,$1.00 ,$0.00 ,"$67,460.61 ",n/a,n/a,n/a,n/a,61.74%,n/a,n/a,Cash
+233643678,TRADITIONAL IRA,WHITF,WHITEHAVEN COAL LIMITED NPV ISIN #AU000000WHC8 SEDOL #B1XQXC4,1700,$3.35 ,($0.10),"$5,695.00 ",($173.06),-2.95%,$233.00 ,4.26%,5.21%,"$5,462.00 ",$3.21 ,Cash
+233643678,TRADITIONAL IRA,WFRD,WEATHERFORD INTL PLC ORD SHS NEW ISIN #IE00BLNN3691 SEDOL #BLNN369,40,$26.56 ,($1.39),"$1,062.40 ",($55.60),-4.98%,($221.30),-17.24%,0.97%,"$1,283.70 ",$32.09 ,Cash
+233643678,TRADITIONAL IRA,VALE,VALE S.A. SPONS ADS REPR 1 COM NPV,110,$14.72 ,($0.21),"$1,619.20 ",($23.10),-1.41%,($467.73),-22.42%,1.48%,"$2,086.93 ",$18.97 ,Cash
+233643678,TRADITIONAL IRA,DO,DIAMOND OFFSHORE DRILLING INC COM,80,$7.47 ,($0.08),$597.60 ,($6.40),-1.06%,$47.20 ,8.57%,0.55%,$550.40 ,$6.88 ,Cash
+233643678,TRADITIONAL IRA,VAL,VALARIS LTD COM USD0.40,110,$50.52 ,($0.01),"$5,557.20 ",($1.10),-0.02%,$43.46 ,0.78%,5.09%,"$5,513.74 ",$50.12 ,Cash
+233643678,TRADITIONAL IRA,VALWS,VALARIS LTD WTS EXP 04/29/2028 ISIN #BMG9460G1197,150,$7.22 ,$0.03 ,"$1,083.00 ",$5.01 ,0.46%,($79.86),-6.87%,0.99%,"$1,162.86 ",$7.75 ,Cash
+233643678,TRADITIONAL IRA,LEE,LEE ENTERPRISES INC COM,30,$18.60 ,$0.40 ,$558.00 ,$12.00 ,2.19%,($330.53),-37.20%,0.51%,$888.53 ,$29.62 ,Cash
+233643678,TRADITIONAL IRA,CCJ,CAMECO CORP COM NPV ISIN #CA13321L1085 SEDOL #2166160,50,$21.91 ,$1.24 ,"$1,095.50 ",$62.00 ,5.99%,($316.96),-22.45%,1.00%,"$1,412.46 ",$28.25 ,Cash
+233643678,TRADITIONAL IRA,GLATF,GLOBAL ATOMIC CORPORATION COM NPV ISIN #CA37957M1068 SEDOL #BF11BK3,300,$2.32 ,$0.22 ,$696.00 ,$64.86 ,10.27%,($264.55),-27.55%,0.64%,$960.55 ,$3.20 ,Cash
+233643678,TRADITIONAL IRA,URNM,SPROTT FDS TR URANIUM MINERS E,35,$59.76 ,$1.91 ,"$2,091.60 ",$66.85 ,3.30%,($747.43),-26.33%,1.91%,"$2,839.03 ",$81.12 ,Cash
+233643678,TRADITIONAL IRA,AFMJF,ALPHAMIN RES CORP COM NPV ISIN #MU0456S00006 SEDOL #BTGWK02,2750,$0.65 ,$0.03 ,"$1,787.50 ",$83.32 ,4.88%,($509.98),-22.20%,1.64%,"$2,297.48 ",$0.84 ,Cash
+233643678,TRADITIONAL IRA,UAN,CVR PARTNERS LP COM,15,$115.62 ,$7.88 ,"$1,734.30 ",$118.20 ,7.31%,($238.10),-12.08%,1.59%,"$1,972.40 ",$131.49 ,Cash
+233643678,TRADITIONAL IRA,WFTUF,WEATHERFORD INTL PLC WTS EXP 12/13/2023,1500,$0.45 ,$0.09 ,$667.50 ,$142.35 ,27.10%,($127.50),-16.04%,0.61%,$795.00 ,$0.53 ,Cash
+233643678,TRADITIONAL IRA,OIH,VANECK ETF TRUST OIL SERVICES ETF,20,$246.42 ,$11.26 ,"$4,928.40 ",$225.20 ,4.78%,$373.66 ,8.20%,4.51%,"$4,554.74 ",$227.74 ,Cash
+233643678,TRADITIONAL IRA,SRUUF,SPROTT PHYSICAL URANIUM TR TRUST UNIT CAD ISIN #CA85210A1049 SEDOL #BNZKG52,1700,$10.83 ,$0.54 ,"$18,411.00 ",$919.36 ,5.25%,"($3,639.17)",-16.51%,16.85%,"$22,050.17 ",$12.97 ,Cash
+233643678,TRADITIONAL IRA,Pending Activity,,,,"($5,780.59)",,,,,,,,,
+242124634,SEP-IRA,SPAXX**,FIDELITY GOVERNMENT MONEY MARKET,3002.74,$1.00 ,$0.00 ,"$3,002.74 ",n/a,n/a,n/a,n/a,58.09%,n/a,n/a,Cash
+242124634,SEP-IRA,SRUUF,SPROTT PHYSICAL URANIUM TR TRUST UNIT CAD ISIN #CA85210A1049 SEDOL #BNZKG52,200,$10.83 ,$0.54 ,"$2,166.00 ",$108.16 ,5.25%,($730.00),-25.21%,41.91%,"$2,896.00 ",$14.48 ,Cash
+,,,,,,,,,,,,,,,
+"The data and information in this spreadsheet is provided to you solely for your use and is not for distribution. The spreadsheet is provided for informational purposes only, and is not intended to provide advice, nor should it be construed as an offer to sell, a solicitation of an offer to buy or a recommendation for any security by Fidelity or any third party. Data and information shown is based on information known to Fidelity as of the date it was exported and is subject to change. It should not be used in place of your account statements or trade confirmations and is not intended for tax reporting purposes. For more information on the data included in this spreadsheet, including any limitations thereof, go to Fidelity.com.",,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+"Brokerage services are provided by Fidelity Brokerage Services LLC, 900 Salem Street, Smithfield, RI 02917. Custody and other services provided by National Financial Services LLC. Both are Fidelity Investment companies and members SIPC, NYSE.",,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+Date downloaded 06/21/2022 6:41 PM ET,,,,,,,,,,,,,,,

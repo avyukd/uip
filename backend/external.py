@@ -8,23 +8,16 @@ from enum import Enum
 from typing import List
 import json 
 import re
-from utils import get_tickers
+from utils import get_tickers, get_option_name
 from exceptions import NoOptionsFoundForTicker
 import yfinance as yf
 
 def get_option_data(ticker: str, expiry: str, strike: float):
     expiry = expiry.split("-")
-    expiry_nodash = expiry[2][-2:] + expiry[0] + expiry[1]
-
     expiry_dashed = expiry[2]+"-"+expiry[0]+"-"+expiry[1]
+
+    option_name = get_option_name(ticker, expiry, strike)
     
-    strikestr = "{:.3f}".format(strike)
-    while len(strikestr) <= 8:
-        strikestr = "0" + strikestr
-    strikestr = strikestr.replace(".", "")
-
-    option_name = f"{ticker}{expiry_nodash}C{strikestr}"
-
     if not os.path.exists(f"cache/options/{option_name}"):
         os.makedirs(f"cache/options/{option_name}")
     
@@ -54,6 +47,17 @@ def get_option_data(ticker: str, expiry: str, strike: float):
                     with open(f"cache/options/{option_name}/{current_time}.json", "w+") as f:
                         json.dump({"data": option}, f)
                     return option
+
+def get_unknown_asset_price(asset_name: str): 
+    keys = json.load(open("keys.json"))
+    base_URL = "https://eodhistoricaldata.com/api/real-time/"
+    URL = base_URL + asset_name + "?api_token=" + keys["EOD_API_KEY"] + "&fmt=json&filter=close"
+    str_price = requests.get(URL).text.replace("[","").replace("]","")
+    try:
+        price = float(str_price)
+    except ValueError:
+        price = 0
+    return price
 
 def get_stock_prices():
     """

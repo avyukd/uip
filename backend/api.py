@@ -1,11 +1,12 @@
-from fastapi import FastAPI, Query, Depends, HTTPException
+from fastapi import FastAPI, Query, Depends, HTTPException, File, UploadFile
 from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 from loader import load_all_options, load_all_stocks, save_scenario, load_scenario
 from model import Model
 import json
-
+import shutil
 from utils import delete_scenario, get_scenarios
+import pandas as pd
 
 app = FastAPI()
 
@@ -17,6 +18,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/upload_portfolio")
+def upload_portfolio(portfolio_csv_wrapper: UploadFile, name: str):
+    portfolio_csv = portfolio_csv.file
+    file_location = f"tmp/{name}_{portfolio_csv_wrapper.filename}"
+    with open(file_location, "wb+") as file_object:
+        shutil.copyfileobj(portfolio_csv, file_object) 
+        
+    
 
 @app.post("/save_scenario")
 def save_scenario_endpoint(model: Model, name: str):

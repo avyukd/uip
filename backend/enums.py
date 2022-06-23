@@ -11,3 +11,8 @@ class Commodity(Enum):
 
 class Forex(Enum):
     AUD = "QAD"
+
+class Direction(Enum):
+    LONG = "LONG"
+    SHORT = "SHORT"
+    NA = "NA"

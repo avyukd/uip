@@ -4,6 +4,7 @@ import os
 from math import log, sqrt, pi, exp
 from scipy.stats import norm
 import numpy as np
+import pandas as pd
 
 def discount(val: float, rate: float, yrs: float) -> float:
     """
@@ -68,7 +69,35 @@ def get_scenarios():
 #     """
 #     pass
 
+def read_fidelity_csv(filename: str):
+    df = pd.read_csv(filename)
 
+    pending_activity = df.loc[df["Symbol"] == "Pending Activity", "Last Price Change"].values[0] 
+
+    pending_activity = pending_activity.replace("$", "")
+    pending_activity = pending_activity.replace(",", "")
+    if pending_activity[0] == "(" and pending_activity[-1] == ")":
+        pending_activity = pending_activity[1:-1]
+        pending_activity = -float(pending_activity)
+    else:
+        pending_activity = float(pending_activity)
+
+    print(pending_activity)
+
+    df = df[["Symbol", "Quantity", "Cost Basis"]]
+    
+    df["Quantity"] = df.groupby(["Symbol"])["Quantity"].transform("sum")
+    df["Cost Basis"] = df["Cost Basis"].replace('[\$,]', '', regex=True).astype(float)
+    df["Cost Basis"] = df.groupby(["Symbol"])["Cost Basis"].transform("sum")
+
+    df = df.drop_duplicates(subset=["Symbol"])
+    df = df.replace("SPAXX**", "Cash")
+    df.loc[df["Symbol"] == "Cash", "Quantity"] += pending_activity
+    # df.loc[df["Symbol"] == "Cash", "Cost Basis"] = df["Quantity"]
+    df = df[df["Quantity"] > 0]
+    df["Cost Basis Per Share"] = df["Cost Basis"] / df["Quantity"]
+
+    return df
 
 def parse_date(date: str) -> str:
     """
@@ -153,3 +182,13 @@ def build_indicators(detail: Dict, share_price: float):
             if detail["net_cash"] > share_price * detail["shs"]:
                 indicators["negative_EV"] = True
     return indicators
+
+def get_option_name(ticker, expiry, strike) -> str:
+    expiry = expiry.split("-")
+    expiry_nodash = expiry[2][-2:] + expiry[0] + expiry[1]    
+    strikestr = "{:.3f}".format(strike)
+    while len(strikestr) <= 8:
+        strikestr = "0" + strikestr
+    strikestr = strikestr.replace(".", "")
+    option_name = f"{ticker}{expiry_nodash}C{strikestr}"
+    return option_name
